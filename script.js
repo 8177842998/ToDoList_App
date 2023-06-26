@@ -13,6 +13,10 @@ let todos = JSON.parse(localStorage.getItem("todo-list"));
 let editId;
 let isEditTask = false;
 
+var total = document.getElementById("total");
+total.textContent = 0; // Set the initial count to 0
+
+
 // get id for the Add button
 let addBtn = document.getElementById("addBtn");
 // get id for the count of the task
@@ -33,7 +37,7 @@ addBtn.addEventListener("click", (e) => {
       // set the attribute for checkbox
       checkbox.setAttribute("type", "checkbox");
 
-      // increment in count of task
+      // increment the count of tasks
       total.textContent = +total.textContent + 1;
       // save in local storage
       localStorage.setItem("todo-list", JSON.stringify(todos));
@@ -67,7 +71,7 @@ clearAll.addEventListener("click", () => {
   todos.splice(0, todos.length);
   localStorage.setItem("todo-list", JSON.stringify(todos));
   showTodo();
-  total.textContent = +0;
+  total.textContent = 0;
 });
 
 // Functions
@@ -132,10 +136,15 @@ function editTask(taskId, textName) {
 }
 //Delete the task
 
+// Delete the task
 function deleteTask(deleteId, filter) {
   isEditTask = false;
+  let taskToDelete = todos[deleteId];
   todos.splice(deleteId, 1);
   localStorage.setItem("todo-list", JSON.stringify(todos));
   showTodo(filter);
-  total.textContent = +total.textContent - 1;
+  if (taskToDelete.status === "pending") {
+    // decrease the count of task only if it was pending
+    total.textContent = +total.textContent - 1;
+  }
 }
